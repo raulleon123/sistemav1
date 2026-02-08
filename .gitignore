@@ -3,5 +3,7 @@ node_modules/
 public/uploads/*
 !public/uploads/.gitkeep
 database/*.db
+database/*.db-shm
+database/*.db-wal
 *.log
 .DS_Store
