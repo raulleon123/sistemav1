@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle Instalación - FibraSystem</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/"><i class="bi bi-hdd-network-fill me-2"></i>FibraSystem</a>
+      <a href="/" class="btn btn-outline-light btn-sm"><i class="bi bi-arrow-left me-1"></i>Volver</a>
+    </div>
+  </nav>
+
+  <div class="container mt-3 mb-5" id="detalle-container">
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2 text-muted">Cargando instalación...</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const instalacionId = '<%= id %>';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const resp = await fetch(`/instalaciones/${instalacionId}`);
+        const data = await resp.json();
+        renderDetalle(data);
+      } catch (e) {
+        document.getElementById('detalle-container').innerHTML = `
+          <div class="alert alert-danger text-center mt-4">
+            <i class="bi bi-exclamation-triangle fs-3 d-block mb-2"></i>
+            Error al cargar la instalación
+          </div>`;
+      }
+    });
+
+    function renderDetalle(d) {
+      const estadoBadge = { 'completada': 'bg-success', 'pendiente': 'bg-warning text-dark', 'cancelada': 'bg-danger' };
+      const fecha = new Date(d.fecha_creacion).toLocaleString('es-VE');
+
+      let fotosComercialHTML = d.fotos.filter(f => f.tipo === 'comercial').map(f =>
+        `<div class="col-4 col-md-3"><img src="${f.ruta}" class="img-fluid rounded" alt="${f.nombre_archivo}"></div>`
+      ).join('') || '<p class="text-muted">Sin fotos</p>';
+
+      let fotosTecnicaHTML = d.fotos.filter(f => f.tipo === 'tecnica').map(f =>
+        `<div class="col-4 col-md-3"><img src="${f.ruta}" class="img-fluid rounded" alt="${f.nombre_archivo}"></div>`
+      ).join('') || '<p class="text-muted">Sin fotos</p>';
+
+      let pagosHTML = d.pagos.map(p =>
+        `<div class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>${p.metodo}</strong>
+            <small class="d-block text-muted">${p.referencia || 'Sin referencia'}</small>
+          </div>
+          <span class="badge bg-success fs-6">${p.moneda} ${p.monto.toFixed(2)}</span>
+        </div>`
+      ).join('') || '<div class="list-group-item text-center text-muted">Sin pagos registrados</div>';
+
+      document.getElementById('detalle-container').innerHTML = `
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">Instalación ${d.codigo}</h4>
+          <span class="badge ${estadoBadge[d.estado] || 'bg-secondary'} fs-6">${d.estado}</span>
+        </div>
+        <small class="text-muted">${fecha}</small>
+
+        <div class="card shadow-sm mt-3 mb-3">
+          <div class="card-header bg-primary text-white"><h6 class="mb-0"><i class="bi bi-person me-1"></i>Datos del Cliente</h6></div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6"><strong>Nombre:</strong><br>${d.nombre_completo}</div>
+              <div class="col-6"><strong>CI:</strong><br>${d.ci}</div>
+              <div class="col-6 mt-2"><strong>Teléfono:</strong><br>${d.telefono}</div>
+              <div class="col-6 mt-2"><strong>Correo:</strong><br>${d.correo || '-'}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-3">
+          <div class="card-header bg-primary text-white"><h6 class="mb-0"><i class="bi bi-router me-1"></i>Equipo y Plan</h6></div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6"><strong>Equipo:</strong><br>${d.equipo_nombre || '-'}</div>
+              <div class="col-6"><strong>Plan:</strong><br>${d.plan_nombre || '-'} ($${d.plan_precio || 0})</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-3">
+          <div class="card-header bg-primary text-white"><h6 class="mb-0"><i class="bi bi-geo-alt me-1"></i>Ubicación</h6></div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6"><strong>Parroquia:</strong><br>${d.parroquia_nombre || '-'}</div>
+              <div class="col-6"><strong>Sector:</strong><br>${d.sector_nombre || '-'}</div>
+              <div class="col-12 mt-2"><strong>GPS:</strong> ${d.latitud || '-'}, ${d.longitud || '-'}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-3">
+          <div class="card-header bg-primary text-white"><h6 class="mb-0"><i class="bi bi-box me-1"></i>NAP y Materiales</h6></div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6"><strong>Caja NAP:</strong><br>${d.caja_nap_nombre || '-'} (${d.caja_nap_codigo || '-'})</div>
+              <div class="col-6"><strong>Puerto:</strong><br>#${d.numero_puerto || '-'}</div>
+            </div>
+            <hr>
+            <div class="row g-2">
+              <div class="col-4"><small class="text-muted">C. Verde</small><br><strong>${d.cable_verde}m</strong></div>
+              <div class="col-4"><small class="text-muted">C. Azul</small><br><strong>${d.cable_azul}m</strong></div>
+              <div class="col-4"><small class="text-muted">Grapas</small><br><strong>${d.grapas}</strong></div>
+              <div class="col-4"><small class="text-muted">Tirraps</small><br><strong>${d.tirraps}</strong></div>
+              <div class="col-4"><small class="text-muted">Herrajes</small><br><strong>${d.herrajes}</strong></div>
+              <div class="col-4"><small class="text-muted">Tensores</small><br><strong>${d.tensores}</strong></div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-6"><strong>Potencia:</strong><br>${d.potencia_optica} dBm</div>
+              <div class="col-6"><strong>ONU Serial:</strong><br>${d.onu_serial || '-'}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-3">
+          <div class="card-header bg-primary text-white"><h6 class="mb-0"><i class="bi bi-camera me-1"></i>Fotos</h6></div>
+          <div class="card-body">
+            <h6>Área Comercial / Cliente</h6>
+            <div class="row g-2 mb-3">${fotosComercialHTML}</div>
+            <h6>Área Técnica / Planta</h6>
+            <div class="row g-2">${fotosTecnicaHTML}</div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-3">
+          <div class="card-header bg-primary text-white"><h6 class="mb-0"><i class="bi bi-cash me-1"></i>Pagos</h6></div>
+          <div class="card-body">
+            <div class="text-center mb-3">
+              <h6 class="text-muted">Monto Total</h6>
+              <h3 class="text-primary">$${(d.monto_total || 0).toFixed(2)}</h3>
+              <span class="badge ${d.monto_pagado >= d.monto_total ? 'bg-success' : 'bg-warning text-dark'} fs-6">
+                Pagado: $${(d.monto_pagado || 0).toFixed(2)}
+              </span>
+            </div>
+            <div class="list-group">${pagosHTML}</div>
+          </div>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

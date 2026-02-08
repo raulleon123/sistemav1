@@ -1,0 +1,297 @@
+/* ============================================
+   FibraSystem - Sistema de Fibra Óptica
+   ============================================ */
+
+:root {
+  --primary: #0d6efd;
+  --primary-dark: #0a58ca;
+  --success: #198754;
+  --warning: #ffc107;
+  --danger: #dc3545;
+}
+
+body {
+  background-color: #f0f2f5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ---- Stat Cards ---- */
+.stat-card {
+  border: none;
+  border-radius: 12px;
+  transition: transform 0.2s;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+/* ---- Steps Progress ---- */
+.steps-progress {
+  position: relative;
+  padding: 0 10px;
+}
+.steps-bar {
+  position: absolute;
+  top: 18px;
+  left: 40px;
+  right: 40px;
+  height: 4px;
+  background: #dee2e6;
+  border-radius: 2px;
+  z-index: 0;
+}
+.steps-bar-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+.steps-indicators {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #dee2e6;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.3s;
+  border: 3px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.step-label {
+  font-size: 10px;
+  margin-top: 4px;
+  color: #6c757d;
+  font-weight: 500;
+  text-align: center;
+}
+.step-indicator.active .step-circle {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(13,110,253,0.4);
+}
+.step-indicator.active .step-label {
+  color: var(--primary);
+  font-weight: 700;
+}
+.step-indicator.completed .step-circle {
+  background: var(--success);
+  color: #fff;
+}
+.step-indicator.completed .step-label {
+  color: var(--success);
+}
+
+/* ---- Step Panels ---- */
+.step-panel {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.step-panel.active {
+  display: block;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Equipos & Planes Cards ---- */
+.equipo-card, .plan-card {
+  cursor: pointer;
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  transition: all 0.2s;
+  background: #fff;
+}
+.equipo-card:hover, .plan-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(13,110,253,0.15);
+}
+.equipo-card.selected, .plan-card.selected {
+  border-color: var(--primary);
+  background: #e7f1ff;
+  box-shadow: 0 2px 8px rgba(13,110,253,0.2);
+}
+.equipo-card .equipo-icon, .plan-card .plan-icon {
+  font-size: 2rem;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+.plan-card .plan-precio {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* ---- Puertos Grid ---- */
+.puertos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.puerto-btn {
+  border: 2px solid #dee2e6;
+  border-radius: 10px;
+  padding: 10px 6px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fff;
+}
+.puerto-btn.disponible {
+  border-color: var(--success);
+  color: var(--success);
+}
+.puerto-btn.disponible:hover {
+  background: #d1e7dd;
+}
+.puerto-btn.ocupado {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: #f8d7da;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.puerto-btn.selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(13,110,253,0.3);
+}
+.puerto-status {
+  font-size: 10px;
+  font-weight: 400;
+  display: block;
+  margin-top: 2px;
+}
+
+/* ---- Potencia Óptica Bar ---- */
+.potencia-rango {
+  margin-top: 8px;
+}
+.potencia-bar {
+  display: flex;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 24px;
+}
+.potencia-zona {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+}
+.zona-mala { background: #dc3545; }
+.zona-regular { background: #fd7e14; }
+.zona-buena { background: #20c997; }
+.zona-excelente { background: #198754; }
+.potencia-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #6c757d;
+  margin-top: 2px;
+}
+
+/* ---- Fotos Preview ---- */
+.fotos-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.foto-preview-item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+.foto-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.foto-preview-item .foto-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(220,53,69,0.9);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- Payment Cards ---- */
+.pago-item {
+  border-left: 4px solid var(--success);
+}
+.pago-item .pago-remove {
+  color: var(--danger);
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 18px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 576px) {
+  .puertos-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .step-label {
+    font-size: 9px;
+  }
+  .step-circle {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+}
+
+/* ---- Misc ---- */
+.card {
+  border: none;
+  border-radius: 12px;
+}
+.card-header {
+  border-radius: 12px 12px 0 0 !important;
+}
+.form-control:focus, .form-select:focus {
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+  border-color: var(--primary);
+}
+.btn-lg {
+  border-radius: 10px;
+}
+.navbar {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nueva Instalación - FibraSystem</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-hdd-network-fill me-2"></i>FibraSystem
+      </a>
+      <a href="/" class="btn btn-outline-light btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Dashboard
+      </a>
+    </div>
+  </nav>
+
+  <div class="container mt-3 mb-5">
+    <!-- Progress Steps -->
+    <div class="steps-progress mb-4">
+      <div class="steps-bar">
+        <div class="steps-bar-fill" id="progressBarFill"></div>
+      </div>
+      <div class="steps-indicators">
+        <div class="step-indicator active" data-step="1">
+          <div class="step-circle">1</div>
+          <div class="step-label">Cliente</div>
+        </div>
+        <div class="step-indicator" data-step="2">
+          <div class="step-circle">2</div>
+          <div class="step-label">Equipo</div>
+        </div>
+        <div class="step-indicator" data-step="3">
+          <div class="step-circle">3</div>
+          <div class="step-label">Ubicación</div>
+        </div>
+        <div class="step-indicator" data-step="4">
+          <div class="step-circle">4</div>
+          <div class="step-label">NAP / ONU</div>
+        </div>
+        <div class="step-indicator" data-step="5">
+          <div class="step-circle">5</div>
+          <div class="step-label">Fotos</div>
+        </div>
+        <div class="step-indicator" data-step="6">
+          <div class="step-circle">6</div>
+          <div class="step-label">Pago</div>
+        </div>
+      </div>
+    </div>
+
+    <form id="formInstalacion" enctype="multipart/form-data">
+      <!-- ========== PASO 1: Datos del Cliente ========== -->
+      <div class="step-panel active" id="step1">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-person-fill me-2"></i>Paso 1: Datos del Cliente</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="nombre_completo" class="form-label">Nombre Completo <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-control-lg" id="nombre_completo" name="nombre_completo" required placeholder="Ingrese nombre y apellido">
+            </div>
+            <div class="mb-3">
+              <label for="ci" class="form-label">Cédula de Identidad <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <select class="form-select" id="ci_tipo" style="max-width: 80px;">
+                  <option value="V">V</option>
+                  <option value="E">E</option>
+                  <option value="J">J</option>
+                </select>
+                <input type="text" class="form-control form-control-lg" id="ci" name="ci" required placeholder="12345678">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="telefono" class="form-label">Teléfono <span class="text-danger">*</span></label>
+              <input type="tel" class="form-control form-control-lg" id="telefono" name="telefono" required placeholder="0414-1234567">
+            </div>
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control form-control-lg" id="correo" name="correo" placeholder="ejemplo@correo.com">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== PASO 2: Equipo y Plan ========== -->
+      <div class="step-panel" id="step2">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-router-fill me-2"></i>Paso 2: Equipo y Plan</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-4">
+              <label class="form-label fw-bold">Seleccione el Equipo a Instalar <span class="text-danger">*</span></label>
+              <div id="equipos-container" class="row g-2">
+                <!-- Se cargan dinámicamente -->
+              </div>
+            </div>
+            <hr>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Seleccione el Plan <span class="text-danger">*</span></label>
+              <div id="planes-container" class="row g-2">
+                <!-- Se cargan dinámicamente -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== PASO 3: Ubicación ========== -->
+      <div class="step-panel" id="step3">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-geo-alt-fill me-2"></i>Paso 3: Parroquia, Sector y Ubicación GPS</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="parroquia_id" class="form-label">Parroquia <span class="text-danger">*</span></label>
+              <select class="form-select form-select-lg" id="parroquia_id" name="parroquia_id" required>
+                <option value="">Seleccione una parroquia</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="sector_id" class="form-label">Sector <span class="text-danger">*</span></label>
+              <select class="form-select form-select-lg" id="sector_id" name="sector_id" required disabled>
+                <option value="">Primero seleccione una parroquia</option>
+              </select>
+            </div>
+            <hr>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Ubicación GPS</label>
+              <div class="row g-2">
+                <div class="col-6">
+                  <label class="form-label small">Latitud</label>
+                  <input type="text" class="form-control" id="latitud" name="latitud" readonly placeholder="--">
+                </div>
+                <div class="col-6">
+                  <label class="form-label small">Longitud</label>
+                  <input type="text" class="form-control" id="longitud" name="longitud" readonly placeholder="--">
+                </div>
+              </div>
+              <button type="button" class="btn btn-outline-primary mt-2 w-100" id="btnGPS">
+                <i class="bi bi-crosshair me-2"></i>Tomar Ubicación GPS
+              </button>
+              <div id="gps-status" class="mt-2 text-center"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== PASO 4: Caja NAP, Materiales, Potencia Óptica y ONU ========== -->
+      <div class="step-panel" id="step4">
+        <div class="card shadow-sm mb-3">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-box-fill me-2"></i>Paso 4: Caja NAP y Materiales</h5>
+          </div>
+          <div class="card-body">
+            <!-- Búsqueda de Caja NAP -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Buscar Caja NAP</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="buscar_nap" placeholder="Buscar por código o nombre...">
+                <button type="button" class="btn btn-primary" id="btnBuscarNap">
+                  <i class="bi bi-search"></i>
+                </button>
+              </div>
+            </div>
+            <div id="nap-resultados" class="mb-3" style="display:none;">
+              <div class="list-group" id="nap-lista"></div>
+            </div>
+
+            <!-- Puertos de la NAP seleccionada -->
+            <div id="nap-puertos-section" style="display:none;">
+              <h6 class="fw-bold mt-3"><i class="bi bi-ethernet me-1"></i>Puertos - <span id="nap-seleccionada-nombre"></span></h6>
+              <div id="puertos-grid" class="puertos-grid mb-3"></div>
+              <input type="hidden" id="puerto_nap_id" name="puerto_nap_id">
+              <input type="hidden" id="caja_nap_id" name="caja_nap_id">
+            </div>
+
+            <hr>
+
+            <!-- Materiales -->
+            <h6 class="fw-bold"><i class="bi bi-tools me-1"></i>Material Utilizado</h6>
+            <div class="row g-2">
+              <div class="col-6">
+                <label class="form-label small">C. VERDE (metros)</label>
+                <input type="number" class="form-control" id="cable_verde" name="cable_verde" min="0" step="0.5" value="0">
+              </div>
+              <div class="col-6">
+                <label class="form-label small">C. AZUL (metros)</label>
+                <input type="number" class="form-control" id="cable_azul" name="cable_azul" min="0" step="0.5" value="0">
+              </div>
+              <div class="col-6">
+                <label class="form-label small">GRAPAS</label>
+                <input type="number" class="form-control" id="grapas" name="grapas" min="0" value="0">
+              </div>
+              <div class="col-6">
+                <label class="form-label small">TIRRAPS</label>
+                <input type="number" class="form-control" id="tirraps" name="tirraps" min="0" value="0">
+              </div>
+              <div class="col-6">
+                <label class="form-label small">HERRAJES</label>
+                <input type="number" class="form-control" id="herrajes" name="herrajes" min="0" value="0">
+              </div>
+              <div class="col-6">
+                <label class="form-label small">TENSORES</label>
+                <input type="number" class="form-control" id="tensores" name="tensores" min="0" value="0">
+              </div>
+            </div>
+
+            <hr>
+
+            <!-- Potencia Óptica y ONU -->
+            <h6 class="fw-bold"><i class="bi bi-lightning-fill me-1"></i>Potencia Óptica y ONU</h6>
+            <div class="mb-3">
+              <label for="potencia_optica" class="form-label">Potencia Óptica (dBm) <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-control-lg" id="potencia_optica" name="potencia_optica" step="0.01" min="-30" max="-8" placeholder="-20.5" required>
+              <div class="potencia-rango mt-2">
+                <div class="potencia-bar">
+                  <div class="potencia-zona zona-mala">Mala</div>
+                  <div class="potencia-zona zona-regular">Regular</div>
+                  <div class="potencia-zona zona-buena">Buena</div>
+                  <div class="potencia-zona zona-excelente">Excelente</div>
+                </div>
+                <div class="potencia-labels">
+                  <span>-30</span>
+                  <span>-25</span>
+                  <span>-20</span>
+                  <span>-15</span>
+                  <span>-8</span>
+                </div>
+              </div>
+              <div id="potencia-estado" class="mt-1 text-center fw-bold"></div>
+            </div>
+            <div class="mb-3">
+              <label for="onu_serial" class="form-label">Serial ONU <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <input type="text" class="form-control form-control-lg" id="onu_serial" name="onu_serial" placeholder="Escanee o ingrese el serial" required>
+                <button type="button" class="btn btn-outline-primary" id="btnScanONU" title="Escanear código">
+                  <i class="bi bi-upc-scan fs-5"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== PASO 5: Fotos ========== -->
+      <div class="step-panel" id="step5">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-camera-fill me-2"></i>Paso 5: Evidencia Fotográfica</h5>
+          </div>
+          <div class="card-body">
+            <!-- Fotos Comerciales -->
+            <div class="mb-4">
+              <h6 class="fw-bold"><i class="bi bi-shop me-1"></i>Área Comercial / Cliente</h6>
+              <p class="text-muted small">Fotos del área del cliente, fachada, punto de instalación</p>
+              <div id="fotos-comercial-preview" class="fotos-preview-grid mb-2"></div>
+              <label class="btn btn-outline-primary w-100">
+                <i class="bi bi-camera me-2"></i>Tomar / Seleccionar Fotos Comerciales
+                <input type="file" id="fotos_comercial" accept="image/*" multiple capture="environment" class="d-none">
+              </label>
+            </div>
+
+            <hr>
+
+            <!-- Fotos Técnicas -->
+            <div class="mb-3">
+              <h6 class="fw-bold"><i class="bi bi-tools me-1"></i>Área Técnica / Planta</h6>
+              <p class="text-muted small">Fotos de la caja NAP, conexión de fibra, ONU instalada</p>
+              <div id="fotos-tecnica-preview" class="fotos-preview-grid mb-2"></div>
+              <label class="btn btn-outline-success w-100">
+                <i class="bi bi-camera me-2"></i>Tomar / Seleccionar Fotos Técnicas
+                <input type="file" id="fotos_tecnica" accept="image/*" multiple capture="environment" class="d-none">
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== PASO 6: Pago ========== -->
+      <div class="step-panel" id="step6">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-cash-stack me-2"></i>Paso 6: Caja de Pago</h5>
+          </div>
+          <div class="card-body">
+            <!-- Tipo de pago -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Tipo de Instalación</label>
+              <div class="row g-2">
+                <div class="col-6">
+                  <input type="radio" class="btn-check" name="tipo_pago" id="pago_normal" value="normal" checked>
+                  <label class="btn btn-outline-primary w-100 py-3" for="pago_normal">
+                    <i class="bi bi-cash-coin d-block fs-3 mb-1"></i>
+                    Normal
+                  </label>
+                </div>
+                <div class="col-6">
+                  <input type="radio" class="btn-check" name="tipo_pago" id="pago_cashea" value="cashea">
+                  <label class="btn btn-outline-primary w-100 py-3" for="pago_cashea">
+                    <i class="bi bi-credit-card d-block fs-3 mb-1"></i>
+                    Cashea
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Resumen de monto -->
+            <div class="card bg-light mb-3">
+              <div class="card-body text-center">
+                <h6 class="text-muted">Monto Total a Pagar</h6>
+                <h2 class="text-primary mb-0">$<span id="monto_total_display">0.00</span></h2>
+                <small class="text-muted">Bs. <span id="monto_total_bs">0.00</span></small>
+                <div class="mt-2">
+                  <span class="badge bg-warning text-dark fs-6">Pendiente: $<span id="monto_pendiente">0.00</span></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Agregar pagos -->
+            <h6 class="fw-bold"><i class="bi bi-plus-circle me-1"></i>Agregar Pago</h6>
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="mb-2">
+                  <label class="form-label small">Método de Pago</label>
+                  <select class="form-select" id="pago_metodo">
+                    <option value="pagomovil">Pago Móvil (Bs)</option>
+                    <option value="efectivo_bs">Efectivo Bolívares</option>
+                    <option value="efectivo_usd">Efectivo Dólares</option>
+                    <option value="transferencia">Transferencia (Bs)</option>
+                    <option value="zelle">Zelle (USD)</option>
+                  </select>
+                </div>
+                <div class="row g-2 mb-2">
+                  <div class="col-5">
+                    <label class="form-label small">Moneda</label>
+                    <select class="form-select" id="pago_moneda">
+                      <option value="BS">Bolívares</option>
+                      <option value="USD">Dólares</option>
+                    </select>
+                  </div>
+                  <div class="col-7">
+                    <label class="form-label small">Monto</label>
+                    <input type="number" class="form-control" id="pago_monto" step="0.01" min="0" placeholder="0.00">
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <label class="form-label small">Referencia (opcional)</label>
+                  <input type="text" class="form-control" id="pago_referencia" placeholder="Nro. de referencia">
+                </div>
+                <button type="button" class="btn btn-success w-100" id="btnAgregarPago">
+                  <i class="bi bi-plus-circle me-1"></i>Agregar Pago
+                </button>
+              </div>
+            </div>
+
+            <!-- Lista de pagos agregados -->
+            <div id="pagos-lista">
+              <h6 class="fw-bold">Pagos Registrados</h6>
+              <div id="pagos-items" class="list-group mb-3">
+                <div class="list-group-item text-center text-muted py-3">
+                  <i class="bi bi-wallet2 d-block fs-4 mb-1"></i>
+                  No se han registrado pagos
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="d-flex justify-content-between mt-3 mb-5">
+        <button type="button" class="btn btn-secondary btn-lg" id="btnAnterior" style="display:none;">
+          <i class="bi bi-arrow-left me-1"></i>Anterior
+        </button>
+        <div class="ms-auto">
+          <button type="button" class="btn btn-primary btn-lg" id="btnSiguiente">
+            Siguiente <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+          <button type="button" class="btn btn-success btn-lg" id="btnGuardar" style="display:none;">
+            <i class="bi bi-check-circle me-1"></i>Guardar Instalación
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal de éxito -->
+  <div class="modal fade" id="modalExito" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center py-5">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+          <h3 class="mt-3">¡Instalación Registrada!</h3>
+          <p class="text-muted">Código: <strong id="codigo-instalacion"></strong></p>
+          <div class="d-grid gap-2 mt-4">
+            <a href="/" class="btn btn-primary btn-lg">Ir al Dashboard</a>
+            <a href="/instalaciones/nueva" class="btn btn-outline-primary">Nueva Instalación</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
